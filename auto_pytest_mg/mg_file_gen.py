@@ -26,7 +26,7 @@ def _generate_mg_test_file_text(file_path: Path) -> str:
     node = _ast_parse_file(file_path)
     functions = [MGFunction(x) for x in node.body if isinstance(x, ast.FunctionDef)]
     classes = [MGClass(x) for x in node.body if isinstance(x, ast.ClassDef)]
-    return "\n\n\n".join(
+    text_body = "\n\n\n".join(
         [
             _get_imports_line(file_path, functions, classes),
             *[class_.get_fixture_text() for class_ in classes],
@@ -34,6 +34,7 @@ def _generate_mg_test_file_text(file_path: Path) -> str:
             *[function.get_function_test_text() for function in functions],
         ]
     )
+    return f"{text_body}\n"
 
 
 def _get_imports_line(file_path: Path, functions: List[MGFunction], classes: List[MGClass]):

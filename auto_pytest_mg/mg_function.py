@@ -58,7 +58,7 @@ class MGFunction:
 
     def _get_function_body_lines(self, assert_obj: str, indent: str) -> List[str]:
         return [
-            f"{indent}{line}"
+            f"{indent}{line}" if line else ""
             for line in [
                 *self._get_arrange_variable_lines(),
                 f"mg.generate_uut_mocks_with_asserts({assert_obj})",
