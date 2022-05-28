@@ -1,5 +1,5 @@
 # type: ignore[attr-defined]
-from typing import TYPE_CHECKING, Dict, List, Optional
+from typing import TYPE_CHECKING, List, Optional
 
 import ast
 from dataclasses import dataclass
@@ -37,15 +37,13 @@ class MGFunction:
     def get_method_test_text(self) -> str:
         function_definition = f"{INDENT}def test_{self.name}(self, mocker, mg, {self.parent_class.mock_fixture_name}):"
         asert_obj = f"{self.parent_class.mock_fixture_name}.{self.name}"
-        indent = INDENT * 2
-        function_body_lines = self._get_function_body_lines(asert_obj, indent)
+        function_body_lines = self._get_function_body_lines(asert_obj,  INDENT * 2)
         return self._get_function_text(function_definition, function_body_lines)
 
     def get_function_test_text(self) -> str:
         function_definition = f"def test_{self.name}(mocker, mg):"
         asert_obj = self.name
-        indent = INDENT
-        function_body_lines = self._get_function_body_lines(asert_obj, indent)
+        function_body_lines = self._get_function_body_lines(asert_obj, INDENT)
         return self._get_function_text(function_definition, function_body_lines)
 
     def _get_arrange_variable_lines(self):
