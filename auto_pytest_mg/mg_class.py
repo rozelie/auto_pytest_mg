@@ -31,6 +31,6 @@ class MGClass:
 
     def get_test_text(self) -> str:
         class_definition = f"class Test{self.name}:"
-        method_lines = [method.get_test_text() for method in self.methods]
+        method_lines = [method.get_method_test_text() for method in self.methods]
         method_lines_separated = "\n\n".join(method_lines)
         return "\n".join([class_definition, method_lines_separated])

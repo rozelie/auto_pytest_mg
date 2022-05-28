@@ -29,7 +29,7 @@ def _generate_mg_test_file_text(file_path: Path) -> str:
         [
             f"from {file_path.stem.replace('.py', '')} import {', '.join(all_function_and_class_names)}",
             *[class_.get_test_text() for class_ in classes],
-            *[function.get_test_text() for function in functions],
+            *[function.get_function_test_text() for function in functions],
         ]
     )
 
