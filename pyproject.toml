@@ -5,7 +5,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "auto_pytest_mg"
-version = "0.1.0"
+version = "0.2.0"
 description = "Awesome `auto_pytest_mg` is a Python cli/package created with https://github.com/TezRomacH/python-package-template"
 readme = "README.md"
 authors = ["auto_pytest_mg <ryan.ozelie@gmail.com>"]
