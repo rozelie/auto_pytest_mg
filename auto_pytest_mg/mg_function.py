@@ -1,9 +1,10 @@
-from typing import Any, Dict, List, Optional
+from typing import TYPE_CHECKING, Dict, List, Optional
 
 import ast
 from dataclasses import dataclass
 
-import inflection
+if TYPE_CHECKING:
+    from auto_pytest_mg import mg_class
 
 INDENT = "    "
 
@@ -11,7 +12,7 @@ INDENT = "    "
 @dataclass
 class MGFunction:
     definition: ast.FunctionDef
-    parent_class: Optional[ast.ClassDef] = None
+    parent_class: Optional["mg_class.MGClass"] = None
 
     @property
     def name(self) -> str:
@@ -42,9 +43,7 @@ class MGFunction:
 
     @property
     def class_instance_variable(self) -> str:
-        if not self.parent_class:
-            return ""
-        return f"{inflection.underscore(self.parent_class.name)}"
+        return self.parent_class.instance_variable if self.parent_class else ""
 
     def get_test_text(self) -> str:
         if not self.is_method:

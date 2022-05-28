@@ -4,6 +4,8 @@ from typing import List
 import ast
 from dataclasses import dataclass
 
+import inflection
+
 from auto_pytest_mg.mg_function import MGFunction
 
 
@@ -16,9 +18,13 @@ class MGClass:
         return self.definition.name
 
     @property
+    def instance_variable(self) -> str:
+        return f"{inflection.underscore(self.name)}"
+
+    @property
     def methods(self) -> List[MGFunction]:
         return [
-            MGFunction(method, parent_class=self.definition)
+            MGFunction(method, parent_class=self)
             for method in self.definition.body
             if isinstance(method, ast.FunctionDef)
         ]
