@@ -70,7 +70,13 @@ class MGClass:
         if init_test_text:
             method_lines.append(init_test_text)
 
-        method_lines.extend([method.get_method_test_text() for method in self.methods])
+        method_lines.extend(
+            [
+                method.get_method_test_text()
+                for method in self.methods
+                if not method.name == "__init__"
+            ]
+        )
         method_lines_separated = "\n\n".join(method_lines)
         return "\n".join([class_definition, method_lines_separated])
 
