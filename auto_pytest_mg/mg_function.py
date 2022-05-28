@@ -4,10 +4,10 @@ from typing import TYPE_CHECKING, Dict, List, Optional
 import ast
 from dataclasses import dataclass
 
+from auto_pytest_mg.static import INDENT
+
 if TYPE_CHECKING:
     from auto_pytest_mg import mg_class
-
-INDENT = "    "
 
 
 @dataclass
@@ -31,30 +31,14 @@ class MGFunction:
         return False
 
     @property
-    def arg_name_to_annotation(self) -> Dict[str, Optional[ast.expr]]:
-        return {
-            arg.arg: arg.annotation if arg.annotation else None
-            for arg in self.definition.args.args
-            if arg.arg not in {"self", "cls"}
-        }
-
-    @property
     def arg_names(self) -> List[str]:
-        return list(self.arg_name_to_annotation.keys())
-
-    @property
-    def class_instance_variable(self) -> str:
-        return self.parent_class.instance_variable if self.parent_class else ""
+        return [arg.arg for arg in self.definition.args.args if arg.arg not in {"self", "cls"}]
 
     def get_method_test_text(self) -> str:
-        function_definition = f"{INDENT}def test_{self.name}(self, mocker, mg):"
-        asert_obj = f"{self.class_instance_variable}.{self.name}"
+        function_definition = f"{INDENT}def test_{self.name}(self, mocker, mg, {self.parent_class.mock_fixture_name}):"
+        asert_obj = f"{self.parent_class.mock_fixture_name}.{self.name}"
         indent = INDENT * 2
         function_body_lines = self._get_function_body_lines(asert_obj, indent)
-        function_body_lines.insert(
-            0,
-            f"{indent}{self.class_instance_variable} = {self.parent_class.name}()",
-        )
         return self._get_function_text(function_definition, function_body_lines)
 
     def get_function_test_text(self) -> str:
@@ -65,12 +49,12 @@ class MGFunction:
         return self._get_function_text(function_definition, function_body_lines)
 
     def _get_arrange_variable_lines(self):
-        return [
-            f"{arg_name} = mocker.MagicMock()" for arg_name in self.arg_name_to_annotation.keys()
-        ]
+        return [f"{arg_name} = mocker.MagicMock()" for arg_name in self.arg_names]
 
     def _get_function_call_line(self) -> str:
-        asert_obj = f"{self.class_instance_variable}.{self.name}" if self.is_method else self.name
+        asert_obj = (
+            f"{self.parent_class.mock_fixture_name}.{self.name}" if self.is_method else self.name
+        )
         function_call = "" if self.is_property else f"({', '.join(self.arg_names)})"
         return f"result = {asert_obj}{function_call}"
 

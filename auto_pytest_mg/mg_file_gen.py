@@ -1,4 +1,6 @@
 # type: ignore[attr-defined]
+from typing import List
+
 import ast
 import logging
 from pathlib import Path
@@ -24,14 +26,20 @@ def _generate_mg_test_file_text(file_path: Path) -> str:
     node = _ast_parse_file(file_path)
     functions = [MGFunction(x) for x in node.body if isinstance(x, ast.FunctionDef)]
     classes = [MGClass(x) for x in node.body if isinstance(x, ast.ClassDef)]
-    all_function_and_class_names = [*[f.name for f in functions], *[c.name for c in classes]]
     return "\n\n\n".join(
         [
-            f"from {file_path.stem.replace('.py', '')} import {', '.join(all_function_and_class_names)}",
+            _get_imports_line(file_path, functions, classes),
+            *[class_.get_fixture_text() for class_ in classes],
             *[class_.get_test_text() for class_ in classes],
             *[function.get_function_test_text() for function in functions],
         ]
     )
+
+
+def _get_imports_line(file_path: Path, functions: List[MGFunction], classes: List[MGClass]):
+    all_function_and_class_names = [*[f.name for f in functions], *[c.name for c in classes]]
+    module_nme = file_path.stem.replace(".py", "")
+    return f"import pytest\n\nfrom {module_nme} import {', '.join(all_function_and_class_names)}"
 
 
 def _get_mg_test_file_path(file_path: Path) -> Path:
