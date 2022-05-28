@@ -2,68 +2,28 @@
 
 <div align="center">
 
-[![Build status](https://github.com/rozelie/auto_pytest_mg/workflows/build/badge.svg?branch=master&event=push)](https://github.com/rozelie/auto_pytest_mg/actions?query=workflow%3Abuild)
 [![Python Version](https://img.shields.io/pypi/pyversions/auto_pytest_mg.svg)](https://pypi.org/project/auto_pytest_mg/)
 [![Dependencies Status](https://img.shields.io/badge/dependencies-up%20to%20date-brightgreen.svg)](https://github.com/rozelie/auto_pytest_mg/pulls?utf8=%E2%9C%93&q=is%3Apr%20author%3Aapp%2Fdependabot)
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![Security: bandit](https://img.shields.io/badge/security-bandit-green.svg)](https://github.com/PyCQA/bandit)
-[![Pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/rozelie/auto_pytest_mg/blob/master/.pre-commit-config.yaml)
-[![Semantic Versions](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--versions-e10079.svg)](https://github.com/rozelie/auto_pytest_mg/releases)
-[![License](https://img.shields.io/github/license/auto_pytest_mg/auto_pytest_mg)](https://github.com/rozelie/auto_pytest_mg/blob/master/LICENSE)
 ![Coverage Report](assets/images/coverage.svg)
-
-Awesome `auto_pytest_mg` is a Python cli/package created with https://github.com/TezRomacH/python-package-template
-
 </div>
 
-### Building and releasing your package
-
-Building a new version of the application contains steps:
-
-- Bump the version of your package `poetry version {(major|minor|patch)}`
-- Commit and push `git commit -m "Updating to version: v{version}"`
-- Create a release on GitHub
-- `poetry publish --build`
-
-## 🚀 Features
-
-### Development features
-
-- Supports for `Python 3.7` and higher.
-- [`Poetry`](https://python-poetry.org/) as the dependencies manager. See configuration in [`pyproject.toml`](https://github.com/rozelie/auto_pytest_mg/blob/master/pyproject.toml) and [`setup.cfg`](https://github.com/rozelie/auto_pytest_mg/blob/master/setup.cfg).
-- Automatic codestyle with [`black`](https://github.com/psf/black), [`isort`](https://github.com/timothycrosley/isort) and [`pyupgrade`](https://github.com/asottile/pyupgrade).
-- Ready-to-use [`pre-commit`](https://pre-commit.com/) hooks with code-formatting.
-- Type checks with [`mypy`](https://mypy.readthedocs.io); docstring checks with [`darglint`](https://github.com/terrencepreilly/darglint); security checks with [`safety`](https://github.com/pyupio/safety) and [`bandit`](https://github.com/PyCQA/bandit)
-- Testing with [`pytest`](https://docs.pytest.org/en/latest/).
-- Ready-to-use [`.editorconfig`](https://github.com/rozelie/auto_pytest_mg/blob/master/.editorconfig), [`.dockerignore`](https://github.com/rozelie/auto_pytest_mg/blob/master/.dockerignore), and [`.gitignore`](https://github.com/rozelie/auto_pytest_mg/blob/master/.gitignore). You don't have to worry about those things.
+- GitHub: [https://github.com/rozelie/auto_pytest_mg](https://github.com/rozelie/auto_pytest_mg)
+- GitHub Releases: [https://github.com/rozelie/auto_pytest_mg/releases](https://github.com/rozelie/auto_pytest_mg/releases)
+- PyPi: [https://pypi.org/project/auto-pytest-mg/](https://pypi.org/project/auto-pytest-mg/)
 
 
-## Installation
-
+## Basic Usage
+Install the package and run with a file path as an argument to generate the test file.
 ```bash
 pip install -U auto_pytest_mg
+auto_pytest_mg <FILE_PATH>
 ```
 
-or install with `Poetry`
+# Development
 
-```bash
-poetry add auto_pytest_mg
-```
-
-Then you can run
-
-```bash
-auto_pytest_mg --help
-```
-
-or with `Poetry`:
-
-```bash
-poetry run auto_pytest_mg --help
-```
-
-### Makefile usage
+## Makefile usage
 
 [`Makefile`](https://github.com/rozelie/auto_pytest_mg/blob/master/Makefile) contains a lot of functions for faster development.
 
@@ -258,47 +218,21 @@ make cleanup
 </p>
 </details>
 
-## 📈 Releases
+## Build and Release
 
-You can see the list of available releases on the [GitHub Releases](https://github.com/rozelie/auto_pytest_mg/releases) page.
+Building a new version of the application contains steps:
 
-We follow [Semantic Versions](https://semver.org/) specification.
+1. Bump the version of your package `poetry version {(major|minor|patch)}`
+1. `git add pyproject.toml`
+1. Commit and push `git commit -m "Updating to version: v{version}"`
+1. Create a release on GitHub
+1. `poetry publish --build`
 
-We use [`Release Drafter`](https://github.com/marketplace/actions/release-drafter). As pull requests are merged, a draft release is kept up-to-date listing the changes, ready to publish when you’re ready. With the categories option, you can categorize pull requests in release notes using labels.
-
-### List of labels and corresponding titles
-
-|               **Label**               |  **Title in Releases**  |
-| :-----------------------------------: | :---------------------: |
-|       `enhancement`, `feature`        |       🚀 Features       |
-| `bug`, `refactoring`, `bugfix`, `fix` | 🔧 Fixes & Refactoring  |
-|       `build`, `ci`, `testing`        | 📦 Build System & CI/CD |
-|              `breaking`               |   💥 Breaking Changes   |
-|            `documentation`            |    📝 Documentation     |
-|            `dependencies`             | ⬆️ Dependencies updates |
-
-You can update it in [`release-drafter.yml`](https://github.com/rozelie/auto_pytest_mg/blob/master/.github/release-drafter.yml).
-
-GitHub creates the `bug`, `enhancement`, and `documentation` labels for you. Dependabot creates the `dependencies` label. Create the remaining labels on the Issues tab of your GitHub repository, when you need them.
 
 ## 🛡 License
 
-[![License](https://img.shields.io/github/license/auto_pytest_mg/auto_pytest_mg)](https://github.com/rozelie/auto_pytest_mg/blob/master/LICENSE)
-
 This project is licensed under the terms of the `MIT` license. See [LICENSE](https://github.com/rozelie/auto_pytest_mg/blob/master/LICENSE) for more details.
 
-## 📃 Citation
-
-```bibtex
-@misc{auto_pytest_mg,
-  author = {auto_pytest_mg},
-  title = {Awesome `auto_pytest_mg` is a Python cli/package created with https://github.com/TezRomacH/python-package-template},
-  year = {2022},
-  publisher = {GitHub},
-  journal = {GitHub repository},
-  howpublished = {\url{https://github.com/rozelie/auto_pytest_mg}}
-}
-```
 
 ## Credits [![🚀 Your next Python package needs a bleeding-edge project structure.](https://img.shields.io/badge/python--package--template-%F0%9F%9A%80-brightgreen)](https://github.com/TezRomacH/python-package-template)
 
