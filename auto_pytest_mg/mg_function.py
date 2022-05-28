@@ -37,7 +37,7 @@ class MGFunction:
     def get_method_test_text(self) -> str:
         function_definition = f"{INDENT}def test_{self.name}(self, mocker, mg, {self.parent_class.mock_fixture_name}):"
         asert_obj = f"{self.parent_class.mock_fixture_name}.{self.name}"
-        function_body_lines = self._get_function_body_lines(asert_obj,  INDENT * 2)
+        function_body_lines = self._get_function_body_lines(asert_obj, INDENT * 2)
         return self._get_function_text(function_definition, function_body_lines)
 
     def get_function_test_text(self) -> str:
