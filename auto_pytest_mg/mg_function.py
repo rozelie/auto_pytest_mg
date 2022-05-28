@@ -2,7 +2,6 @@ from typing import Any, Dict, List, Optional
 
 import ast
 from dataclasses import dataclass
-from functools import cached_property
 
 import inflection
 
@@ -25,12 +24,12 @@ class MGFunction:
     @property
     def is_property(self) -> bool:
         for decorator in self.definition.decorator_list:
-            if decorator.id in {"property", "cached_property"}:
+            if decorator.id in {"property", "cached_property"}:  # type: ignore
                 return True
         return False
 
-    @cached_property
-    def arg_name_to_annotation(self) -> Dict[str, ast.Name]:
+    @property
+    def arg_name_to_annotation(self) -> Dict[str, Optional[ast.expr]]:
         return {
             arg.arg: arg.annotation if arg.annotation else None
             for arg in self.definition.args.args
@@ -43,6 +42,8 @@ class MGFunction:
 
     @property
     def class_instance_variable(self) -> str:
+        if not self.parent_class:
+            return ""
         return f"{inflection.underscore(self.parent_class.name)}"
 
     def get_test_text(self) -> str:
@@ -69,14 +70,14 @@ class MGFunction:
         if self.is_method:
             function_body_lines.insert(
                 0,
-                f"{indent}{self.class_instance_variable} = mocker.MagicMock(spec={self.parent_class.name})",
+                f"{indent}{self.class_instance_variable} = mocker.MagicMock(spec={self.parent_class.name})",  # type: ignore
             )
         return "\n".join([function_definition, *function_body_lines])
 
     def _get_arrange_variable_lines(self):
         variable_lines = []
         for arg_name, annotation in self.arg_name_to_annotation.items():
-            type_ = annotation.id if annotation else None
+            type_ = annotation.id if annotation else None  # type: ignore
             if type_:
                 mock = f"mocker.MagicMock(spec={type_})"
             else:

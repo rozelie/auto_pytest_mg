@@ -1,3 +1,4 @@
+# type: ignore[attr-defined]
 import ast
 import logging
 from pathlib import Path
