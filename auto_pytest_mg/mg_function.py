@@ -1,3 +1,4 @@
+# type: ignore[attr-defined]
 from typing import TYPE_CHECKING, Dict, List, Optional
 
 import ast
@@ -25,7 +26,7 @@ class MGFunction:
     @property
     def is_property(self) -> bool:
         for decorator in self.definition.decorator_list:
-            if decorator.id in {"property", "cached_property"}:  # type: ignore
+            if decorator.id in {"property", "cached_property"}:
                 return True
         return False
 
@@ -52,7 +53,7 @@ class MGFunction:
         function_body_lines = self._get_function_body_lines(asert_obj, indent)
         function_body_lines.insert(
             0,
-            f"{indent}{self.class_instance_variable} = {self.parent_class.name}()",  # type: ignore
+            f"{indent}{self.class_instance_variable} = {self.parent_class.name}()",
         )
         return self._get_function_text(function_definition, function_body_lines)
 
