@@ -51,7 +51,7 @@ Running `auto_pytest_mg my_project/my_file.py` then generates `my_project/test_m
 # my_project/test_my_file.py
 import pytest
 
-from auto_pytest_mg.test import a_method, DataClass
+from my_project.my_file import a_method, DataClass
 
 
 @pytest.fixture
@@ -90,7 +90,6 @@ def test_a_method(mocker, mg):
     mg.generate_uut_mocks_with_asserts(a_method)
 
     result = a_method()
-
 ```
 
 
