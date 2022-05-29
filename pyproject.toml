@@ -146,5 +146,5 @@ source = "auto_pytest_mg"
 branch = true
 
 [coverage.report]
-fail_under = 50
+fail_under = 90
 show_missing = true
