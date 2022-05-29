@@ -1,4 +1,4 @@
-# type: ignore[attr-defined]
+import re
 from dataclasses import dataclass
 
 import pytest
@@ -12,6 +12,7 @@ MODULE_PATH = f"auto_pytest_mg.mg_file_gen"
 class SourceText:
     input_text: str
     expected_text: str
+    expected_import_re: str
 
 
 FUNCTION_NO_ARGS_SOURCE_TEXT = SourceText(
@@ -22,7 +23,6 @@ def function_no_args() -> None:
     expected_text="""\
 import pytest
 
-from testing_file import function_no_args
 
 
 def test_function_no_args(mocker, mg):
@@ -30,6 +30,7 @@ def test_function_no_args(mocker, mg):
 
     result = function_no_args()
 """,
+    expected_import_re=r"from .*testing_file import function_no_args",
 )
 
 FUNCTION_WITH_ARGS_SOURCE_TEXT = SourceText(
@@ -40,7 +41,6 @@ def function_with_args(a, b) -> None:
     expected_text="""\
 import pytest
 
-from testing_file import function_with_args
 
 
 def test_function_with_args(mocker, mg):
@@ -50,6 +50,7 @@ def test_function_with_args(mocker, mg):
 
     result = function_with_args(a, b)
 """,
+    expected_import_re=r"from .*testing_file import function_with_args",
 )
 
 CLASS_WITH_INIT_SOURCE_TEXT = SourceText(
@@ -63,7 +64,6 @@ class ClassWithInit:
     expected_text="""\
 import pytest
 
-from testing_file import ClassWithInit
 
 
 @pytest.fixture
@@ -86,6 +86,7 @@ class TestClassWithInit:
             b=b,
         )
 """,
+    expected_import_re=r"from .*testing_file import ClassWithInit",
 )
 DATACLASS_SOURCE_TEXT = SourceText(
     input_text="""\
@@ -108,7 +109,6 @@ class DataClass:
     expected_text="""\
 import pytest
 
-from testing_file import DataClass
 
 
 @pytest.fixture
@@ -148,6 +148,7 @@ class TestDataClass:
 
         result = data_class.method_with_args(a, b)
 """,
+    expected_import_re=r"from .*testing_file import DataClass",
 )
 
 
@@ -168,6 +169,16 @@ def test_input_and_expected_file_text(mocker, tmp_path, source_text):
     mocker.patch(f"{MODULE_PATH}.logger.info")
 
     write_mg_test_file(file_path)
-    nice = test_file_path.read_text()
+    test_file_text = test_file_path.read_text()
+    module_import_line = None
+    test_file_lines_no_import_line = []
+    for line in test_file_text.splitlines():
+        if line.startswith("from"):
+            module_import_line = line
+        else:
+            test_file_lines_no_import_line.append(line)
 
-    assert test_file_path.read_text() == source_text.expected_text
+    test_file_text_no_import_line = "\n".join(test_file_lines_no_import_line) + "\n"
+
+    assert test_file_text_no_import_line == source_text.expected_text
+    assert re.match(source_text.expected_import_re, module_import_line)
