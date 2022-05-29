@@ -21,7 +21,10 @@ def version_callback(print_version: bool) -> None:
         sys.exit()
 
 
-@app.command(name="")
+@app.command(
+    name="",
+    help="Generate the test file - run from source's root to create proper full import path",
+)
 def main(
     file_path: Path = typer.Argument(..., help="Python file path to generate test file."),
     print_version: bool = typer.Option(
