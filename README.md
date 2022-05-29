@@ -13,13 +13,100 @@
 - GitHub Releases: [https://github.com/rozelie/auto_pytest_mg/releases](https://github.com/rozelie/auto_pytest_mg/releases)
 - PyPi: [https://pypi.org/project/auto-pytest-mg/](https://pypi.org/project/auto-pytest-mg/)
 
+auto_pytest_mg parses the AST of an input python file to generate a new test file with boilerplate
+test functions. Rendered tests include the `mocker` and `mg` fixtures which are available via the 
+[pytest-mock](https://pypi.org/project/pytest-mock/) and [pytest-mocker-generator](https://pypi.org/project/pytest-mock-generator/) 
+packages, respectively.  
 
-## Basic Usage
-Install the package and run with a file path as an argument to generate the test file.
-```bash
-pip install -U auto_pytest_mg
-auto_pytest_mg <FILE_PATH>
+## Example
+
+Source file located at `my_project/my_file.py`
+```python
+# my_project/my_file.py
+from dataclasses import dataclass
+
+
+@dataclass
+class DataClass:
+    a: str
+    b: int
+
+    @property
+    def property_(self) -> None:
+        ...
+
+    def method(self) -> None:
+        ...
+
+    def method_with_args(self, a: int, b: str) -> None:
+        ...
+
+def a_method():
+    ...
 ```
+
+Running `auto_pytest_mg my_project/my_file.py` then generates `my_project/test_my_file.py`:
+
+```python
+# my_project/test_my_file.py
+import pytest
+
+from auto_pytest_mg.test import a_method, DataClass
+
+
+@pytest.fixture
+def data_class(mocker):
+    a = mocker.MagicMock()
+    b = mocker.MagicMock()
+    return DataClass(a=a, b=b)
+
+
+class TestDataClass:
+    def test__init__(self, mocker):
+        a = mocker.MagicMock()
+        b = mocker.MagicMock()
+
+        return DataClass(a=a, b=b)
+
+    def test_property_(self, mocker, mg, data_class):
+        mg.generate_uut_mocks_with_asserts(data_class.property_)
+
+        result = data_class.property_
+
+    def test_method(self, mocker, mg, data_class):
+        mg.generate_uut_mocks_with_asserts(data_class.method)
+
+        result = data_class.method()
+
+    def test_method_with_args(self, mocker, mg, data_class):
+        a = mocker.MagicMock()
+        b = mocker.MagicMock()
+        mg.generate_uut_mocks_with_asserts(data_class.method_with_args)
+
+        result = data_class.method_with_args(a=a, b=b)
+
+
+def test_a_method(mocker, mg):
+    mg.generate_uut_mocks_with_asserts(a_method)
+
+    result = a_method()
+
+```
+
+
+## Usage
+```bash
+# install the package
+pip install auto_pytest_mg
+
+# go to project's source root
+cd my_project
+
+# pass file to generate tests for
+auto_pytest_mg my_project/my_file.py
+```
+
+The above would generate a test file at `my_project/test_my_file.py`. 
 
 # Development
 
