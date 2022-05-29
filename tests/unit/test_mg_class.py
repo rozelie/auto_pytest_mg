@@ -13,26 +13,6 @@ def mg_class(mocker):
 
 
 @pytest.fixture
-def init_func(mocker):
-    init_func = mocker.MagicMock(spec=ast.FunctionDef)
-    init_func.name = "__init__"
-    init_func.args = mocker.MagicMock()
-    init_func.args.args = [mocker.MagicMock(arg="self"), mocker.MagicMock(arg="a")]
-    method.decorator_list = []
-    return init_func
-
-
-@pytest.fixture
-def method(mocker):
-    method = mocker.MagicMock(spec=ast.FunctionDef)
-    method.name = "method"
-    method.args = mocker.MagicMock()
-    method.args.args = []
-    method.decorator_list = []
-    return method
-
-
-@pytest.fixture
 def class_level_arg(mocker):
     class_level_arg = mocker.MagicMock(spec=ast.AnnAssign)
     class_level_arg.target = mocker.MagicMock(id="class_level_arg")
@@ -67,16 +47,16 @@ class TestMGClass:
 
         assert arg_names == ["class_level_arg"]
 
-    def test_arg_names__from__init__(self, mg_class, init_func):
-        mg_class.definition.body = [init_func]
+    def test_arg_names__from__init__(self, mg_class, ast_init_function):
+        mg_class.definition.body = [ast_init_function]
 
         arg_names = mg_class.arg_names
 
         assert arg_names == ["a"]
 
-    def test_methods(self, mocker, mg_class, method):
+    def test_methods(self, mocker, mg_class, ast_method):
         not_a_method = mocker.MagicMock(spec=ast.AnnAssign)
-        mg_class.definition.body = [method, not_a_method]
+        mg_class.definition.body = [ast_method, not_a_method]
 
         methods = mg_class.methods
 
@@ -113,8 +93,8 @@ def class_name(mocker):
     return ClassName(arg_1=arg_1, arg_2=arg_2)"""
         )
 
-    def test_get_test_text__no_init(self, mg_class, method):
-        mg_class.definition.body = [method]
+    def test_get_test_text__no_init(self, mg_class, ast_method):
+        mg_class.definition.body = [ast_method]
 
         test_text = mg_class.get_test_text()
 
@@ -128,8 +108,8 @@ class TestClassName:
         result = class_name.method()"""
         )
 
-    def test_get_test_text__with_init(self, mg_class, init_func):
-        mg_class.definition.body = [init_func]
+    def test_get_test_text__with_init(self, mg_class, ast_init_function):
+        mg_class.definition.body = [ast_init_function]
 
         test_text = mg_class.get_test_text()
 

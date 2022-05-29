@@ -1,18 +1,21 @@
+from typing import Optional
+
 import re
 from dataclasses import dataclass
 
 import pytest
 
-from auto_pytest_mg.mg_file_gen import write_mg_test_file
+from auto_pytest_mg.mg_ast import MGAST
 
-MODULE_PATH = f"auto_pytest_mg.mg_file_gen"
+MODULE_PATH = f"auto_pytest_mg.mg_ast"
 
 
 @dataclass
 class SourceText:
     input_text: str
     expected_text: str
-    expected_import_re: str
+    expected_import_re: Optional[str] = None
+    expected_module_path_constant_re: Optional[str] = None
 
 
 FUNCTION_NO_ARGS_SOURCE_TEXT = SourceText(
@@ -21,10 +24,6 @@ def function_no_args() -> None:
     ...
 """,
     expected_text="""\
-import pytest
-
-
-
 def test_function_no_args(mocker, mg):
     mg.generate_uut_mocks_with_asserts(function_no_args)
 
@@ -39,10 +38,6 @@ def function_with_args(a, b) -> None:
     ...
 """,
     expected_text="""\
-import pytest
-
-
-
 def test_function_with_args(mocker, mg):
     a = mocker.MagicMock()
     b = mocker.MagicMock()
@@ -62,10 +57,6 @@ class ClassWithInit:
         self.b = b
 """,
     expected_text="""\
-import pytest
-
-
-
 @pytest.fixture
 def class_with_init(mocker):
     a = mocker.MagicMock()
@@ -101,10 +92,6 @@ class DataClass:
 
 """,
     expected_text="""\
-import pytest
-
-
-
 @pytest.fixture
 def data_class(mocker):
     a = mocker.MagicMock()
@@ -139,6 +126,26 @@ class TestDataClass:
     expected_import_re=r"from .*testing_file import DataClass",
 )
 
+IMPORTS_ONLY_TEXT = SourceText(
+    input_text="""\
+import sys
+from dataclasses import dataclass
+""",
+    expected_text="""\
+@pytest.fixture
+def mock_sys(mocker):
+    mock_sys_ = mocker.patch(f"{MODULE_PATH}.sys")
+    return mock_sys_
+
+
+@pytest.fixture
+def mock_dataclass(mocker):
+    mock_dataclass_ = mocker.patch(f"{MODULE_PATH}.dataclass")
+    return mock_dataclass_
+""",
+    expected_module_path_constant_re=r'MODULE_PATH = ".*testing_file"',
+)
+
 
 @pytest.mark.parametrize(
     ["source_text"],
@@ -147,26 +154,27 @@ class TestDataClass:
         [FUNCTION_WITH_ARGS_SOURCE_TEXT],
         [CLASS_WITH_INIT_SOURCE_TEXT],
         [DATACLASS_SOURCE_TEXT],
+        [IMPORTS_ONLY_TEXT],
     ),
 )
 def test_input_and_expected_file_text(mocker, tmp_path, source_text):
     file_path = tmp_path / "testing_file.py"
     file_path.write_text(source_text.input_text)
     test_file_path = tmp_path / "test_testing_file.py"
-    mocker.patch(f"{MODULE_PATH}._get_mg_test_file_path", return_value=test_file_path)
     mocker.patch(f"{MODULE_PATH}.console")
 
-    write_mg_test_file(file_path)
+    MGAST.from_file(file_path).write_mg_test_file()
     test_file_text = test_file_path.read_text()
     module_import_line = None
-    test_file_lines_no_import_line = []
+    module_path_constant_line = None
     for line in test_file_text.splitlines():
         if line.startswith("from"):
             module_import_line = line
-        else:
-            test_file_lines_no_import_line.append(line)
+        elif line.startswith("MODULE_PATH"):
+            module_path_constant_line = line
 
-    test_file_text_no_import_line = "\n".join(test_file_lines_no_import_line) + "\n"
-
-    assert test_file_text_no_import_line == source_text.expected_text
-    assert re.match(source_text.expected_import_re, module_import_line)
+    assert source_text.expected_text in test_file_text
+    if source_text.expected_import_re and module_import_line:
+        assert re.match(source_text.expected_import_re, module_import_line)
+    if source_text.expected_module_path_constant_re and module_path_constant_line:
+        assert re.match(source_text.expected_module_path_constant_re, module_path_constant_line)

@@ -17,12 +17,13 @@ def test_version_callback(mocker):
     sys_exit.assert_called_once()
 
 
-def test_main(mocker):
-    file_path = mocker.MagicMock()
+def test_main(mocker, tmp_path):
+    file_path = tmp_path
     print_version = mocker.MagicMock()
-    mock_write_mg_test_file = mocker.patch(f"{MODULE_PATH}.mg_file_gen.write_mg_test_file")
+    mock_mgast = mocker.patch(f"{MODULE_PATH}.mg_ast.MGAST")
     mocker.patch(f"{MODULE_PATH}.app.command")
 
     main(file_path, print_version)
 
-    mock_write_mg_test_file.assert_called_once_with(file_path)
+    mock_mgast.from_file.assert_called_once_with(file_path)
+    mock_mgast.from_file.return_value.write_mg_test_file.assert_called_once()

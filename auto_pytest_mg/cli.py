@@ -3,7 +3,7 @@ from pathlib import Path
 
 import typer
 
-from auto_pytest_mg import mg_file_gen, version
+from auto_pytest_mg import mg_ast, version
 from auto_pytest_mg.console import console
 
 app = typer.Typer(
@@ -35,4 +35,5 @@ def main(
         help="Prints the version of the auto_pytest_mg package.",
     ),
 ) -> None:
-    mg_file_gen.write_mg_test_file(file_path)
+    parsed_ast = mg_ast.MGAST.from_file(file_path)
+    parsed_ast.write_mg_test_file()
