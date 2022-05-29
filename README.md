@@ -54,7 +54,7 @@ class DataClass:
     def method_with_args(self, a: int, b: str) -> None:
         ...
 
-def a_method():
+def a_function():
     ...
 ```
 
@@ -64,7 +64,7 @@ Running `auto_pytest_mg my_project/my_file.py` then generates `my_project/test_m
 # my_project/test_my_file.py
 import pytest
 
-from my_project.my_file import a_method, DataClass
+from my_project.my_file import a_function, DataClass
 
 
 @pytest.fixture
@@ -99,10 +99,10 @@ class TestDataClass:
         result = data_class.method_with_args(a=a, b=b)
 
 
-def test_a_method(mocker, mg):
-    mg.generate_uut_mocks_with_asserts(a_method)
+def test_a_function(mocker, mg):
+    mg.generate_uut_mocks_with_asserts(a_function)
 
-    result = a_method()
+    result = a_function()
 ```
 
 # Development
