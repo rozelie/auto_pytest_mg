@@ -28,14 +28,14 @@ pre-commit-install:
 	poetry run pre-commit install
 
 #* Formatters
-.PHONY: codestyle
-codestyle:
+.PHONY: format
+format:
 	poetry run pyupgrade --exit-zero-even-if-changed --py37-plus **/*.py
 	poetry run isort --settings-path pyproject.toml ./
 	poetry run black --config pyproject.toml ./
 
 .PHONY: formatting
-formatting: codestyle
+formatting: format
 
 #* Linting
 .PHONY: test
@@ -43,8 +43,8 @@ test:
 	PYTHONPATH=$(PYTHONPATH) poetry run pytest -c pyproject.toml --cov-report=html --cov=auto_pytest_mg tests/
 	poetry run coverage-badge -o assets/images/coverage.svg -f
 
-.PHONY: check-codestyle
-check-codestyle:
+.PHONY: check-format
+check-format:
 	poetry run isort --diff --check-only --settings-path pyproject.toml ./
 	poetry run black --diff --check --config pyproject.toml ./
 	poetry run darglint --verbosity 2 auto_pytest_mg tests
@@ -60,7 +60,7 @@ check-safety:
 	poetry run bandit -ll --recursive auto_pytest_mg tests
 
 .PHONY: lint
-lint: test check-codestyle mypy check-safety
+lint: test check-format mypy check-safety
 
 .PHONY: update-dev-deps
 update-dev-deps:
