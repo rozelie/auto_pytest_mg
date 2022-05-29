@@ -1,20 +1,18 @@
 from typing import List
 
 import ast
-import logging
 from pathlib import Path
 
+from auto_pytest_mg.console import console
 from auto_pytest_mg.mg_class import MGClass
 from auto_pytest_mg.mg_function import MGFunction
-
-logger = logging.getLogger(__name__)
 
 
 def write_mg_test_file(file_path: Path) -> None:
     file_text = _generate_mg_test_file_text(file_path)
     mg_test_file_path = _get_mg_test_file_path(file_path)
     mg_test_file_path.write_text(file_text)
-    logger.info(f"Created {mg_test_file_path.absolute()}")
+    console.print(f"Generated test file at [green]{mg_test_file_path.absolute()}[/green]")
 
 
 def _ast_parse_file(file_path: Path) -> ast.AST:

@@ -18,6 +18,19 @@ test functions. Rendered tests include the `mocker` and `mg` fixtures which are 
 [pytest-mock](https://pypi.org/project/pytest-mock/) and [pytest-mocker-generator](https://pypi.org/project/pytest-mock-generator/) 
 packages, respectively.  
 
+
+## Usage
+```bash
+# install the package
+pip install auto_pytest_mg
+
+# go to project's source root
+cd my_project
+
+# pass the file to generate tests for
+auto_pytest_mg my_project/my_file.py
+```
+
 ## Example
 
 Source file located at `my_project/my_file.py`
@@ -91,21 +104,6 @@ def test_a_method(mocker, mg):
 
     result = a_method()
 ```
-
-
-## Usage
-```bash
-# install the package
-pip install auto_pytest_mg
-
-# go to project's source root
-cd my_project
-
-# pass file to generate tests for
-auto_pytest_mg my_project/my_file.py
-```
-
-The above would generate a test file at `my_project/test_my_file.py`. 
 
 # Development
 
