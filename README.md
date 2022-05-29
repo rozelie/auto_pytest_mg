@@ -72,19 +72,16 @@ make pre-commit-install
 Automatic formatting uses `pyupgrade`, `isort` and `black`.
 
 ```bash
-make codestyle
-
-# or use synonym
-make formatting
+make format
 ```
 
 Codestyle checks only, without rewriting files:
 
 ```bash
-make check-codestyle
+make check-format
 ```
 
-> Note: `check-codestyle` uses `isort`, `black` and `darglint` library
+> Note: `check-format` uses `isort`, `black` and `darglint` library
 
 Update all dev libraries to the latest version using one comand
 
@@ -151,7 +148,7 @@ make lint
 the same as:
 
 ```bash
-make test && make check-codestyle && make mypy && make check-safety
+make test && make check-format && make mypy && make check-safety
 ```
 
 </p>
