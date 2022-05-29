@@ -1,4 +1,3 @@
-# type: ignore[attr-defined]
 from pathlib import Path
 
 from auto_pytest_mg.mg_file_gen import _get_mg_test_file_path, write_mg_test_file
