@@ -18,6 +18,8 @@ test functions. Rendered tests include the `mocker` and `mg` fixtures which are 
 [pytest-mock](https://pypi.org/project/pytest-mock/) and [pytest-mocker-generator](https://pypi.org/project/pytest-mock-generator/) 
 packages, respectively.  
 
+Note that this packages is a static analysis tool and will not execute any of your code.
+
 
 ## Usage
 ```bash
@@ -104,6 +106,14 @@ def test_a_function(mocker, mg):
 
     result = a_function()
 ```
+
+## Similar packages
+- [pyguin](https://pynguin.readthedocs.io/en/latest/)
+  - Runs given code and uses a genetic algorithm to produce test cases
+  - Can output to unittest/pytest test styles
+- [pythoscope](https://github.com/mkwiatkowski/pythoscope)
+  - Last updated in 2016
+  - Performs static analysis, does not run your code.
 
 # Development
 
