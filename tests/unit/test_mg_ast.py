@@ -29,7 +29,7 @@ def mgast(mocker, tmp_path):
 
 class TestMGAST:
     def test_from_file(
-        self, mocker, mg, mgast, ast_import, ast_import_from, ast_class, ast_function
+        self, mocker, mgast, ast_import, ast_import_from, ast_class, ast_function
     ):
         file_path = mocker.MagicMock()
         mock_parse = mocker.patch(f"{MODULE_PATH}.ast.parse")
@@ -44,7 +44,7 @@ class TestMGAST:
         assert len(mgast_.classes) == 1
         assert len(mgast_.functions) == 1
 
-    def test_write_mg_test_file(self, mocker, mg, mgast, mock_console):
+    def test_write_mg_test_file(self, mgast, mock_console):
         mgast.write_mg_test_file()
 
         assert mgast.mg_test_file_path.read_text() == mgast.mg_test_file_text
