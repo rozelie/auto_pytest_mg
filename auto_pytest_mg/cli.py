@@ -1,3 +1,4 @@
+import sys
 from pathlib import Path
 
 import typer
@@ -17,7 +18,7 @@ def version_callback(print_version: bool) -> None:
     """Print the version of the package."""
     if print_version:
         console.print(f"[yellow]auto_pytest_mg[/] version: [bold blue]{version}[/]")
-        raise typer.Exit()
+        sys.exit()
 
 
 @app.command(name="")
