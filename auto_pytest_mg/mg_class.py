@@ -52,7 +52,8 @@ class MGClass:
             for arg in self.arg_names:
                 lines.append(f"{INDENT}{arg} = mocker.MagicMock()")
 
-        lines.append(f"{INDENT}return {self._get_class_instantiation()}")
+            lines.append(f"{INDENT}return {self._get_class_instantiation()}")
+
         return "\n".join(lines)
 
     def get_test_text(self) -> str:

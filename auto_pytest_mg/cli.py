@@ -2,16 +2,15 @@ import sys
 from pathlib import Path
 
 import typer
-from rich.console import Console
 
 from auto_pytest_mg import mg_file_gen, version
+from auto_pytest_mg.console import console
 
 app = typer.Typer(
     name="auto_pytest_mg",
     help="Generate a pytest/pytest-mock-generator featured test file given a valid python file",
     add_completion=False,
 )
-console = Console()
 
 
 def version_callback(print_version: bool) -> None:

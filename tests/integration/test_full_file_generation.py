@@ -154,7 +154,7 @@ def test_input_and_expected_file_text(mocker, tmp_path, source_text):
     file_path.write_text(source_text.input_text)
     test_file_path = tmp_path / "test_testing_file.py"
     mocker.patch(f"{MODULE_PATH}._get_mg_test_file_path", return_value=test_file_path)
-    mocker.patch(f"{MODULE_PATH}.logger.info")
+    mocker.patch(f"{MODULE_PATH}.console")
 
     write_mg_test_file(file_path)
     test_file_text = test_file_path.read_text()
