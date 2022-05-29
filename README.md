@@ -1,4 +1,4 @@
-# auto_pytest_mg
+# auto_pytest_mg (Automatic pytest Mock Generator)
 
 <div align="center">
 
