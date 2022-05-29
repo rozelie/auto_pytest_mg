@@ -1,4 +1,3 @@
-# type: ignore[attr-defined]
 from typing import TYPE_CHECKING, List, Optional
 
 import ast
@@ -35,8 +34,10 @@ class MGFunction:
         return [arg.arg for arg in self.definition.args.args if arg.arg not in {"self", "cls"}]
 
     def get_method_test_text(self) -> str:
-        function_definition = f"{INDENT}def test_{self.name}(self, mocker, mg, {self.parent_class.mock_fixture_name}):"
-        asert_obj = f"{self.parent_class.mock_fixture_name}.{self.name}"
+        if not self.is_method:
+            return ""
+        function_definition = f"{INDENT}def test_{self.name}(self, mocker, mg, {self.parent_class.mock_fixture_name}):"  # type: ignore
+        asert_obj = f"{self.parent_class.mock_fixture_name}.{self.name}"  # type: ignore
         function_body_lines = self._get_function_body_lines(asert_obj, INDENT * 2)
         return self._get_function_text(function_definition, function_body_lines)
 
@@ -51,7 +52,7 @@ class MGFunction:
 
     def _get_function_call_line(self) -> str:
         asert_obj = (
-            f"{self.parent_class.mock_fixture_name}.{self.name}" if self.is_method else self.name
+            f"{self.parent_class.mock_fixture_name}.{self.name}" if self.is_method else self.name  # type: ignore
         )
         function_call = "" if self.is_property else f"({', '.join(self.arg_names)})"
         return f"result = {asert_obj}{function_call}"

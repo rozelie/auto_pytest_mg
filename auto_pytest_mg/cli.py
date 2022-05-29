@@ -1,4 +1,3 @@
-# type: ignore[attr-defined]
 from pathlib import Path
 
 import typer

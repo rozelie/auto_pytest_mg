@@ -1,4 +1,3 @@
-# type: ignore[attr-defined]
 """Awesome `auto_pytest_mg` is a Python cli/package created with https://github.com/TezRomacH/python-package-template"""
 
 import sys
@@ -11,7 +10,7 @@ else:
 
 def get_version() -> str:
     try:
-        return importlib_metadata.version(__name__)
+        return importlib_metadata.version(__name__)  # type: ignore
     except importlib_metadata.PackageNotFoundError:  # pragma: no cover
         return "unknown"
 

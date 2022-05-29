@@ -1,4 +1,3 @@
-# type: ignore[attr-defined]
 from typing import List
 
 import ast
@@ -37,7 +36,7 @@ def _generate_mg_test_file_text(file_path: Path) -> str:
     return f"{text_body}\n"
 
 
-def _get_imports_line(file_path: Path, functions: List[MGFunction], classes: List[MGClass]):
+def _get_imports_line(file_path: Path, functions: List[MGFunction], classes: List[MGClass]) -> str:
     all_function_and_class_names = [*[f.name for f in functions], *[c.name for c in classes]]
     module_nme = file_path.stem.replace(".py", "")
     return f"import pytest\n\nfrom {module_nme} import {', '.join(all_function_and_class_names)}"
