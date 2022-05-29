@@ -38,8 +38,9 @@ def _generate_mg_test_file_text(file_path: Path) -> str:
 
 def _get_imports_line(file_path: Path, functions: List[MGFunction], classes: List[MGClass]) -> str:
     all_function_and_class_names = [*[f.name for f in functions], *[c.name for c in classes]]
-    module_nme = file_path.stem.replace(".py", "")
-    return f"import pytest\n\nfrom {module_nme} import {', '.join(all_function_and_class_names)}"
+    module_path_parts = ".".join(file_path.parts[:-1])
+    module_name = file_path.stem.replace(".py", "")
+    return f"import pytest\n\nfrom {module_path_parts}.{module_name} import {', '.join(all_function_and_class_names)}"
 
 
 def _get_mg_test_file_path(file_path: Path) -> Path:
