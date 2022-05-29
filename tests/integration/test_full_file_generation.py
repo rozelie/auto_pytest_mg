@@ -48,7 +48,7 @@ def test_function_with_args(mocker, mg):
     b = mocker.MagicMock()
     mg.generate_uut_mocks_with_asserts(function_with_args)
 
-    result = function_with_args(a, b)
+    result = function_with_args(a=a, b=b)
 """,
     expected_import_re=r"from .*testing_file import function_with_args",
 )
@@ -70,10 +70,7 @@ import pytest
 def class_with_init(mocker):
     a = mocker.MagicMock()
     b = mocker.MagicMock()
-    return ClassWithInit(
-        a=a,
-        b=b,
-    )
+    return ClassWithInit(a=a, b=b)
 
 
 class TestClassWithInit:
@@ -81,10 +78,7 @@ class TestClassWithInit:
         a = mocker.MagicMock()
         b = mocker.MagicMock()
 
-        class_with_init = ClassWithInit(
-            a=a,
-            b=b,
-        )
+        class_with_init_ = ClassWithInit(a=a, b=b)
 """,
     expected_import_re=r"from .*testing_file import ClassWithInit",
 )
@@ -115,10 +109,7 @@ import pytest
 def data_class(mocker):
     a = mocker.MagicMock()
     b = mocker.MagicMock()
-    return DataClass(
-        a=a,
-        b=b,
-    )
+    return DataClass(a=a, b=b)
 
 
 class TestDataClass:
@@ -126,10 +117,7 @@ class TestDataClass:
         a = mocker.MagicMock()
         b = mocker.MagicMock()
 
-        data_class = DataClass(
-            a=a,
-            b=b,
-        )
+        data_class_ = DataClass(a=a, b=b)
 
     def test_property_(self, mocker, mg, data_class):
         mg.generate_uut_mocks_with_asserts(data_class.property_)
@@ -146,7 +134,7 @@ class TestDataClass:
         b = mocker.MagicMock()
         mg.generate_uut_mocks_with_asserts(data_class.method_with_args)
 
-        result = data_class.method_with_args(a, b)
+        result = data_class.method_with_args(a=a, b=b)
 """,
     expected_import_re=r"from .*testing_file import DataClass",
 )

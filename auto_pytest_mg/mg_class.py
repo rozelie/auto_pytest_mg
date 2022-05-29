@@ -51,15 +51,8 @@ class MGClass:
         else:
             for arg in self.arg_names:
                 lines.append(f"{INDENT}{arg} = mocker.MagicMock()")
-            call_args = [f"{arg}={arg}," for arg in self.arg_names]
-            lines.extend(
-                [
-                    f"{INDENT}return {self.name}(",
-                    *[f"{INDENT * 2}{instance_var}" for instance_var in call_args],
-                    f"{INDENT})",
-                ]
-            )
 
+        lines.append(f"{INDENT}return {self._get_class_instantiation()}")
         return "\n".join(lines)
 
     def get_test_text(self) -> str:
@@ -85,10 +78,12 @@ class MGClass:
 
         function_definition = f"{INDENT}def test__init__(self, mocker):"
         arg_mocks = [f"{INDENT * 2}{arg_name} = mocker.MagicMock()" for arg_name in self.arg_names]
-        call_args = [f"{arg}={arg}," for arg in self.arg_names]
-        class_instantiation = [
-            f"{INDENT * 2}{self.mock_fixture_name} = {self.name}(",
-            *[f"{INDENT * 3}{instance_var}" for instance_var in call_args],
-            f"{INDENT * 2})",
-        ]
-        return "\n".join([function_definition, *arg_mocks, "", *class_instantiation])
+        class_instantiation = (
+            f"{INDENT * 2}{self.mock_fixture_name}_ = {self._get_class_instantiation()}"
+        )
+        return "\n".join([function_definition, *arg_mocks, "", class_instantiation])
+
+    def _get_class_instantiation(self) -> str:
+        call_args = " ".join([f"{arg}={arg}," for arg in self.arg_names])
+        call_args = call_args[:-1]  # remove trailing comma
+        return f"{self.name}({call_args})"

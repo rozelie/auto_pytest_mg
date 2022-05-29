@@ -58,7 +58,9 @@ class MGFunction:
         asert_obj = (
             f"{self.parent_class.mock_fixture_name}.{self.name}" if self.is_method else self.name  # type: ignore
         )
-        function_call = "" if self.is_property else f"({', '.join(self.arg_names)})"
+        call_args = " ".join([f"{arg}={arg}," for arg in self.arg_names])
+        call_args = call_args[:-1]  # remove trailing comma
+        function_call = "" if self.is_property else f"({call_args})"
         return f"result = {asert_obj}{function_call}"
 
     def _get_function_body_lines(self, assert_obj: str, indent: str) -> List[str]:
