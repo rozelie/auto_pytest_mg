@@ -60,14 +60,14 @@ class TestMGClass:
 
         assert arg_names == []
 
-    def test_arg_names__class_level_arg(self, mocker, mg, mg_class, class_level_arg):
+    def test_arg_names__class_level_arg(self, mg_class, class_level_arg):
         mg_class.definition.body = [class_level_arg]
 
         arg_names = mg_class.arg_names
 
         assert arg_names == ["class_level_arg"]
 
-    def test_arg_names__from__init__(self, mocker, mg, mg_class, init_func):
+    def test_arg_names__from__init__(self, mg_class, init_func):
         mg_class.definition.body = [init_func]
 
         arg_names = mg_class.arg_names
@@ -83,7 +83,7 @@ class TestMGClass:
         assert len(methods) == 1
         assert methods[0].name == "method"
 
-    def test_get_fixture_text__no_arg_names(self, mocker, mg, mg_class):
+    def test_get_fixture_text__no_arg_names(self, mg_class):
         fixture_text = mg_class.get_fixture_text()
 
         assert (
@@ -94,7 +94,7 @@ def class_name(mocker):
     return ClassName()"""
         )
 
-    def test_get_fixture_text__with_arg_names(self, mocker, mg, mg_class):
+    def test_get_fixture_text__with_arg_names(self, mocker, mg_class):
         arg_1 = mocker.MagicMock(spec=ast.AnnAssign)
         arg_1.target = mocker.MagicMock(id="arg_1")
         arg_2 = mocker.MagicMock(spec=ast.AnnAssign)
@@ -113,7 +113,7 @@ def class_name(mocker):
     return ClassName(arg_1=arg_1, arg_2=arg_2)"""
         )
 
-    def test_get_test_text__no_init(self, mocker, mg, mg_class, method):
+    def test_get_test_text__no_init(self, mg_class, method):
         mg_class.definition.body = [method]
 
         test_text = mg_class.get_test_text()
@@ -128,7 +128,7 @@ class TestClassName:
         result = class_name.method()"""
         )
 
-    def test_get_test_text__with_init(self, mocker, mg, mg_class, init_func):
+    def test_get_test_text__with_init(self, mg_class, init_func):
         mg_class.definition.body = [init_func]
 
         test_text = mg_class.get_test_text()
