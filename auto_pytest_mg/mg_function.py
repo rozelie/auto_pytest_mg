@@ -25,8 +25,12 @@ class MGFunction:
     @property
     def is_property(self) -> bool:
         for decorator in self.definition.decorator_list:
-            if decorator.id in {"property", "cached_property"}:
-                return True
+            try:
+                if decorator.id in {"property", "cached_property"}:
+                    return True
+            except AttributeError:
+                continue
+
         return False
 
     @property
