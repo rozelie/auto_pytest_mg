@@ -13,7 +13,7 @@
 - GitHub Releases: [https://github.com/rozelie/auto_pytest_mg/releases](https://github.com/rozelie/auto_pytest_mg/releases)
 - PyPi: [https://pypi.org/project/auto-pytest-mg/](https://pypi.org/project/auto-pytest-mg/)
 
-auto_pytest_mg parses the AST of an input python file to generate a new test file with boilerplate
+auto_pytest_mg parses the AST of an input python file to generate a new test file with fixtures and boilerplate
 test functions. Rendered tests include the `mocker` and `mg` fixtures which are available via the 
 [pytest-mock](https://pypi.org/project/pytest-mock/) and [pytest-mocker-generator](https://pypi.org/project/pytest-mock-generator/) 
 packages, respectively.  
