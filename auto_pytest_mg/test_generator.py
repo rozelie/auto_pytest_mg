@@ -55,12 +55,12 @@ class TestGenerator:
                 raise Exit(0)
 
         file_path.parent.mkdir(parents=True, exist_ok=True)
-        file_path.write_text(self.tests)
+        file_path.write_text(self.test_file)
         console.print(f"Generated test file at [green]{file_path.absolute()}[/green]")
 
     @property
-    def tests(self) -> str:
-        text_body = LINES_BETWEEN_TOP_LEVEL_BLOCKS.join(
+    def test_file(self) -> str:
+        file_body = LINES_BETWEEN_TOP_LEVEL_BLOCKS.join(
             [
                 self.import_lines,
                 f'MODULE_PATH = "{self.dotted_module_path}"',
@@ -75,7 +75,7 @@ class TestGenerator:
                 *[f.test_case for f in self.function_tests],
             ]
         )
-        return f"{text_body}\n"
+        return f"{file_body}\n"
 
     @property
     def import_lines(self) -> str:

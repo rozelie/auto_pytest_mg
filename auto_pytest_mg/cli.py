@@ -24,10 +24,10 @@ def main(
     test_generator = TestGenerator.from_file(
         file_path=user_args.file_path, project_path=user_args.project_path
     )
-    _output_test(user_args, test_generator)
+    _output_test_file(user_args, test_generator)
 
 
-def _output_test(user_args: UserArgs, test_generator: TestGenerator) -> None:
+def _output_test_file(user_args: UserArgs, test_generator: TestGenerator) -> None:
     if user_args.output_path:
         test_generator.write_file(user_args.output_path)
     elif user_args.use_default_unit_test_path:
@@ -36,4 +36,4 @@ def _output_test(user_args: UserArgs, test_generator: TestGenerator) -> None:
         )
         test_generator.write_file(unit_test_path)
     else:
-        console.print(test_generator.tests)
+        console.print(test_generator.test_file)
