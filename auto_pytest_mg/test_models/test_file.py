@@ -90,7 +90,9 @@ class TestFile:
 
     @property
     def dotted_module_path(self) -> str:
-        file_relative_to_project_root = self.file_path.absolute().relative_to(self.project_path.absolute())
+        file_relative_to_project_root = self.file_path.absolute().relative_to(
+            self.project_path.absolute()
+        )
         module_path_parts = ".".join(file_relative_to_project_root.parts[:-1])
         module_name = self.file_path.stem.replace(".py", "")
         if module_path_parts:
