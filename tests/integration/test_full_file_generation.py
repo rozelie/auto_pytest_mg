@@ -5,9 +5,9 @@ from dataclasses import dataclass
 
 import pytest
 
-from auto_pytest_mg.mg_ast import MGAST
+from auto_pytest_mg.test_generator import TestGenerator
 
-MODULE_PATH = f"auto_pytest_mg.mg_ast"
+MODULE_PATH = f"auto_pytest_mg.test_generator"
 
 
 @dataclass
@@ -126,22 +126,22 @@ class TestDataClass:
     expected_import_re=r"from .*testing_file import DataClass",
 )
 
-IMPORTS_ONLY_TEXT = SourceText(
+IMPORTS_STDLIB_TEXT = SourceText(
     input_text="""\
 import sys
-from dataclasses import dataclass
+""",
+    expected_text="",
+    expected_module_path_constant_re=r'MODULE_PATH = ".*testing_file"',
+)
+
+IMPORTS_NON_STDLIB_TEXT = SourceText(
+    input_text="""\
+import requests
 """,
     expected_text="""\
 @pytest.fixture
-def mock_sys(mocker):
-    mock_sys_ = mocker.patch(f"{MODULE_PATH}.sys")
-    return mock_sys_
-
-
-@pytest.fixture
-def mock_dataclass(mocker):
-    mock_dataclass_ = mocker.patch(f"{MODULE_PATH}.dataclass")
-    return mock_dataclass_
+def mock_requests(mocker):
+    return mocker.patch(f"{MODULE_PATH}.requests")
 """,
     expected_module_path_constant_re=r'MODULE_PATH = ".*testing_file"',
 )
@@ -154,7 +154,8 @@ def mock_dataclass(mocker):
         [FUNCTION_WITH_ARGS_SOURCE_TEXT],
         [CLASS_WITH_INIT_SOURCE_TEXT],
         [DATACLASS_SOURCE_TEXT],
-        [IMPORTS_ONLY_TEXT],
+        [IMPORTS_STDLIB_TEXT],
+        [IMPORTS_NON_STDLIB_TEXT],
     ),
 )
 def test_input_and_expected_file_text(mocker, tmp_path, source_text):
@@ -163,7 +164,7 @@ def test_input_and_expected_file_text(mocker, tmp_path, source_text):
     test_file_path = tmp_path / "test_testing_file.py"
     mocker.patch(f"{MODULE_PATH}.console")
 
-    MGAST.from_file(file_path).write_mg_test_file()
+    TestGenerator.from_file(file_path, file_path.parent).write_file(test_file_path)
     test_file_text = test_file_path.read_text()
     module_import_line = None
     module_path_constant_line = None

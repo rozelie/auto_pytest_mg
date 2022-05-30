@@ -618,3 +618,6 @@ MigrationBackup/
 
 # PyCharm
 .idea
+
+# Local testing dirs
+local_testing
