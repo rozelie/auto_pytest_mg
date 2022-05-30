@@ -7,7 +7,7 @@ import pytest
 
 from auto_pytest_mg.test_models.test_file import TestFile
 
-MODULE_PATH = f"auto_pytest_mg.test_generator"
+MODULE_PATH = f"auto_pytest_mg.test_models.test_file"
 
 
 @dataclass
