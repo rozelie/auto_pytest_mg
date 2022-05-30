@@ -90,12 +90,8 @@ class TestGenerator:
 
     @property
     def dotted_module_path(self) -> str:
-        file_path_absolute = str(self.file_path.absolute())
-        project_path_absolute = str(self.project_path.absolute())
-        # trim leading /
-        path_from_project_root = Path(file_path_absolute.replace(project_path_absolute, "")[1:])
-
-        module_path_parts = ".".join(path_from_project_root.parts[:-1])
+        file_relative_to_project_root = self.file_path.absolute().relative_to(self.project_path.absolute())
+        module_path_parts = ".".join(file_relative_to_project_root.parts[:-1])
         module_name = self.file_path.stem.replace(".py", "")
         if module_path_parts:
             return f"{module_path_parts}.{module_name}"
