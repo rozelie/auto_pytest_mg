@@ -85,7 +85,7 @@ class TestGenerator:
         ]
         return (
             f"import pytest\n\n"
-            f"from {self.dotted_module_path} import {', '.join(all_function_and_class_names)}"
+            f"from {self.dotted_module_path} import {', '.join(sorted(all_function_and_class_names))}"
         )
 
     @property
