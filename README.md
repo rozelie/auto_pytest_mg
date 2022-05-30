@@ -38,73 +38,62 @@ auto_pytest_mg my_project/my_file.py
 Source file located at `my_project/my_file.py`
 ```python
 # my_project/my_file.py
-from dataclasses import dataclass
+import requests
+
+class MyClass:
+
+    def __init__(self, a: int):
+        self.a = a
+
+    def method(self) -> int:
+        return self.a
 
 
-@dataclass
-class DataClass:
-    a: str
-    b: int
-
-    @property
-    def property_(self) -> None:
-        ...
-
-    def method(self) -> None:
-        ...
-
-    def method_with_args(self, a: int, b: str) -> None:
-        ...
-
-def a_function():
-    ...
+def get(url: str) -> requests.Response:
+    return requests.get(url)
 ```
 
-Running `auto_pytest_mg my_project/my_file.py` then generates `my_project/test_my_file.py`:
+Running `auto_pytest_mg my_project/my_file.py` will then output to stdout the generated test file:
 
 ```python
-# my_project/test_my_file.py
 import pytest
 
-from my_project.my_file import a_function, DataClass
+from my_project.my_file import get, MyClass
+
+
+MODULE_PATH = "my_project.my_file"
 
 
 @pytest.fixture
-def data_class(mocker):
+def mock_requests(mocker):
+    return mocker.patch(f"{MODULE_PATH}.requests")
+
+
+
+@pytest.fixture
+def my_class(mocker):
     a = mocker.MagicMock()
-    b = mocker.MagicMock()
-    return DataClass(a=a, b=b)
+    return MyClass(a=a)
 
 
-class TestDataClass:
+class TestMyClass:
     def test__init__(self, mocker):
         a = mocker.MagicMock()
-        b = mocker.MagicMock()
 
-        return DataClass(a=a, b=b)
+        my_class_ = MyClass(a=a)
 
-    def test_property_(self, mocker, mg, data_class):
-        mg.generate_uut_mocks_with_asserts(data_class.property_)
+    def test_method(self, mocker, mg, my_class):
+        mg.generate_uut_mocks_with_asserts(my_class.method)
 
-        result = data_class.property_
-
-    def test_method(self, mocker, mg, data_class):
-        mg.generate_uut_mocks_with_asserts(data_class.method)
-
-        result = data_class.method()
-
-    def test_method_with_args(self, mocker, mg, data_class):
-        a = mocker.MagicMock()
-        b = mocker.MagicMock()
-        mg.generate_uut_mocks_with_asserts(data_class.method_with_args)
-
-        result = data_class.method_with_args(a=a, b=b)
+        result = my_class.method()
 
 
-def test_a_function(mocker, mg):
-    mg.generate_uut_mocks_with_asserts(a_function)
+      
+def test_get(mocker, mg):
+    url = mocker.MagicMock()
+    mg.generate_uut_mocks_with_asserts(get)
 
-    result = a_function()
+    result = get(url=url)
 ```
 
 ## Similar packages
