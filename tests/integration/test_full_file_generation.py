@@ -5,7 +5,7 @@ from dataclasses import dataclass
 
 import pytest
 
-from auto_pytest_mg.test_generator import TestGenerator
+from auto_pytest_mg.test_models.test_file import TestFile
 
 MODULE_PATH = f"auto_pytest_mg.test_generator"
 
@@ -164,7 +164,7 @@ def test_input_and_expected_file_text(mocker, tmp_path, source_text):
     test_file_path = tmp_path / "test_testing_file.py"
     mocker.patch(f"{MODULE_PATH}.console")
 
-    TestGenerator.from_file(file_path, file_path.parent).write_file(test_file_path)
+    TestFile.from_source_file(file_path, file_path.parent).write(test_file_path)
     test_file_text = test_file_path.read_text()
     module_import_line = None
     module_path_constant_line = None

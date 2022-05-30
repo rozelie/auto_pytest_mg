@@ -17,7 +17,7 @@ from auto_pytest_mg.test_models.import_fixtures import ImportFixture, ImportFrom
 
 
 @dataclass
-class TestGenerator:
+class TestFile:
     file_path: Path
     project_path: Path
     import_fixtures: List[ImportFixture]
@@ -27,7 +27,7 @@ class TestGenerator:
     function_tests: List[FunctionTestCase]
 
     @classmethod
-    def from_file(cls, file_path: Path, project_path: Path) -> "TestGenerator":
+    def from_source_file(cls, file_path: Path, project_path: Path) -> "TestFile":
         ast_ = ast.parse(file_path.read_text())
 
         def _load_class_instances_for_ast_nodes(load_cls: Any, if_ast_cls: Any) -> List[Any]:
@@ -45,7 +45,7 @@ class TestGenerator:
             function_tests=_load_class_instances_for_ast_nodes(FunctionTestCase, ast.FunctionDef),
         )
 
-    def write_file(self, file_path: Path) -> None:
+    def write(self, file_path: Path) -> None:
         if file_path.exists():
             overwrite = prompt(
                 f"File already exists at {file_path.absolute()} - overwrite it? [Y/n]"
@@ -55,11 +55,11 @@ class TestGenerator:
                 raise Exit(0)
 
         file_path.parent.mkdir(parents=True, exist_ok=True)
-        file_path.write_text(self.test_file)
+        file_path.write_text(self.file_text)
         console.print(f"Generated test file at [green]{file_path.absolute()}[/green]")
 
     @property
-    def test_file(self) -> str:
+    def file_text(self) -> str:
         file_body = LINES_BETWEEN_TOP_LEVEL_BLOCKS.join(
             [
                 self.import_lines,

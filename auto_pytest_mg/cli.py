@@ -7,7 +7,7 @@ import typer
 from auto_pytest_mg import args, static
 from auto_pytest_mg.args import UserArgs
 from auto_pytest_mg.console import console
-from auto_pytest_mg.test_generator import TestGenerator
+from auto_pytest_mg.test_models.test_file import TestFile
 
 app = typer.Typer(name="auto_pytest_mg", help=static.HELP_SUMMARY, add_completion=False)
 
@@ -21,19 +21,19 @@ def main(
 ) -> None:
     user_args = UserArgs(**locals())
     user_args.validate()
-    test_generator = TestGenerator.from_file(
+    test_file = TestFile.from_source_file(
         file_path=user_args.file_path, project_path=user_args.project_path
     )
-    _output_test_file(user_args, test_generator)
+    _output_test_file(user_args, test_file)
 
 
-def _output_test_file(user_args: UserArgs, test_generator: TestGenerator) -> None:
+def _output_test_file(user_args: UserArgs, test_file: TestFile) -> None:
     if user_args.output_path:
-        test_generator.write_file(user_args.output_path)
+        test_file.write(user_args.output_path)
     elif user_args.use_default_unit_test_path:
         unit_test_path = (
             user_args.project_path / "tests" / "unit" / f"test_{user_args.file_path.stem}.py"
         )
-        test_generator.write_file(unit_test_path)
+        test_file.write(unit_test_path)
     else:
-        console.print(test_generator.test_file)
+        console.print(test_file.file_text)
