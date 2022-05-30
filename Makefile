@@ -62,6 +62,17 @@ check-safety:
 .PHONY: lint
 lint: test check-format mypy check-safety
 
+# Example: make release-version VERSION=0.1.0
+.PHONY: release-version
+release-version:
+	# ensure there are no staged changes
+	git diff --exit-code
+	git add pyproject.toml
+	git commit -m "Updating to version: v$(VERSION)" pyproject.toml
+	git tag -a v$(VERSION) -m "v$(VERSION)"
+	git push
+	poetry publish --build
+
 .PHONY: update-dev-deps
 update-dev-deps:
 	poetry add -D bandit@latest darglint@latest "isort[colors]@latest" mypy@latest pre-commit@latest pydocstyle@latest pylint@latest pytest@latest pyupgrade@latest safety@latest coverage@latest coverage-badge@latest pytest-html@latest pytest-cov@latest
@@ -108,6 +119,8 @@ pytestcache-remove:
 .PHONY: build-remove
 build-remove:
 	rm -rf build/
+
+
 
 .PHONY: cleanup
 cleanup: pycache-remove dsstore-remove mypycache-remove ipynbcheckpoints-remove pytestcache-remove

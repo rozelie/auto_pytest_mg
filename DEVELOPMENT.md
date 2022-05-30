@@ -194,10 +194,5 @@ make cleanup
 
 ## Build and Release
 
-Building a new version of the application contains steps:
-
-1. Bump the version of your package `poetry version {(major|minor|patch)}`
-1. `git add pyproject.toml`
-1. Commit and push `git commit -m "Updating to version: v{version}"`
-1. Create a release on GitHub
-1. `poetry publish --build`
+1. Bump the version `poetry version (major|minor|patch)`
+1. `make release-version VERSION=<new version>`
