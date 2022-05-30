@@ -8,12 +8,12 @@ from pathlib import Path
 from typer import Exit, prompt
 
 from auto_pytest_mg import utils
-from auto_pytest_mg.class_fixture import ClassFixture
-from auto_pytest_mg.class_test_cases import ClassTestCases
 from auto_pytest_mg.console import console
-from auto_pytest_mg.function_test_case import FunctionTestCase
-from auto_pytest_mg.import_fixtures import ImportFixture, ImportFromFixtures
 from auto_pytest_mg.static import LINES_BETWEEN_TOP_LEVEL_BLOCKS
+from auto_pytest_mg.test_models.class_fixture import ClassFixture
+from auto_pytest_mg.test_models.class_test_cases import ClassTestCases
+from auto_pytest_mg.test_models.function_test_case import FunctionTestCase
+from auto_pytest_mg.test_models.import_fixtures import ImportFixture, ImportFromFixtures
 
 
 @dataclass

@@ -2,12 +2,12 @@
 import ast
 from dataclasses import dataclass
 
-from auto_pytest_mg import class_ast, utils
 from auto_pytest_mg.static import INDENT
+from auto_pytest_mg.test_models.class_base import ClassBase
 
 
 @dataclass
-class ClassFixture(class_ast.ClassAst):
+class ClassFixture(ClassBase):
     """Generates mock data for ast.ClassDef."""
 
     ast_definition: ast.ClassDef

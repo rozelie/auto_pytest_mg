@@ -1,14 +1,14 @@
-from typing import List, Optional
+from typing import List
 
 import ast
 from dataclasses import dataclass
 
 from auto_pytest_mg import utils
-from auto_pytest_mg.function_test_case import FunctionTestCase
+from auto_pytest_mg.test_models.function_test_case import FunctionTestCase
 
 
 @dataclass
-class ClassAst:
+class ClassBase:
     ast_definition: ast.ClassDef
 
     @property

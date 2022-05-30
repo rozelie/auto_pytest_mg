@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from auto_pytest_mg.static import INDENT
 
 if TYPE_CHECKING:
-    from auto_pytest_mg.class_fixture import MockedClass
+    from auto_pytest_mg.test_models.class_fixture import MockedClass
 
 
 @dataclass

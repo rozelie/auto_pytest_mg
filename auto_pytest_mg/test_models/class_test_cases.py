@@ -4,13 +4,13 @@ from typing import List, Optional
 import ast
 from dataclasses import dataclass
 
-from auto_pytest_mg import class_ast
-from auto_pytest_mg.function_test_case import FunctionTestCase
 from auto_pytest_mg.static import INDENT
+from auto_pytest_mg.test_models.class_base import ClassBase
+from auto_pytest_mg.test_models.function_test_case import FunctionTestCase
 
 
 @dataclass
-class ClassTestCases(class_ast.ClassAst):
+class ClassTestCases(ClassBase):
     """Generates mock data for ast.ClassDef."""
 
     ast_definition: ast.ClassDef
