@@ -67,6 +67,7 @@ lint: test check-format mypy check-safety
 release-version:
 	# ensure there are no staged changes
 	git diff --exit-code
+	poetry version minor
 	git add pyproject.toml
 	git commit -m "Updating to version: v$(VERSION)" pyproject.toml
 	git tag -a v$(VERSION) -m "v$(VERSION)"
